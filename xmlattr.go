@@ -131,7 +131,7 @@ func (x *TXmlAttrs) OnChanged() string {
 }
 
 func (x *TXmlAttrs) ReadOnly() bool {
-	return x.ToBoolDef("readonly", true)
+	return x.ToBoolDef("readonly", false)
 }
 
 func (x *TXmlAttrs) Padded() bool {

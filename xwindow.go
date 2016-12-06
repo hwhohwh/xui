@@ -108,6 +108,14 @@ func (x *TXWindow) buildControls(node xmldom.Node, parent ui.Control, event inte
 		}
 	}
 
+	getMethod := func(name string) (reflect.Method, bool) {
+		if name == "" {
+			var m reflect.Method
+			return m, false
+		}
+		return reflect.TypeOf(event).MethodByName(name)
+	}
+
 	for i = 0; i < node.ChildNodes().Length(); i++ {
 		subnode := node.ChildNodes().Item(i)
 		if subnode.NodeType() != 1 {
@@ -119,29 +127,26 @@ func (x *TXWindow) buildControls(node xmldom.Node, parent ui.Control, event inte
 		case "Button":
 			btn := ui.NewButton(attrs.Text())
 			pcontrol = btn
-			eventname := attrs.Onclick()
-			if eventname != "" {
-				m, ok := reflect.TypeOf(event).MethodByName(eventname)
-				if ok {
-					btn.OnClicked(func(sender *ui.Button) {
-						m.Func.Call([]reflect.Value{reflect.ValueOf(event), reflect.ValueOf(sender)})
-					})
-				}
+
+			m, ok := getMethod(attrs.Onclick())
+			if ok {
+				btn.OnClicked(func(sender *ui.Button) {
+					m.Func.Call([]reflect.Value{reflect.ValueOf(event), reflect.ValueOf(sender)})
+				})
 			}
+
 			x.appendControl(parent, btn, attrs)
 			x.addNameControl(attrs.Name(), btn)
 
 		case "Entry":
 			entry := ui.NewEntry()
 			entry.SetReadOnly(attrs.ReadOnly())
-			eventname := attrs.OnChanged()
-			if eventname != "" {
-				m, ok := reflect.TypeOf(event).MethodByName(eventname)
-				if ok {
-					entry.OnChanged(func(sender *ui.Entry) {
-						m.Func.Call([]reflect.Value{reflect.ValueOf(event), reflect.ValueOf(sender)})
-					})
-				}
+
+			m, ok := getMethod(attrs.OnChanged())
+			if ok {
+				entry.OnChanged(func(sender *ui.Entry) {
+					m.Func.Call([]reflect.Value{reflect.ValueOf(event), reflect.ValueOf(sender)})
+				})
 			}
 			pcontrol = entry
 			entry.SetText(attrs.Text())
@@ -173,15 +178,14 @@ func (x *TXWindow) buildControls(node xmldom.Node, parent ui.Control, event inte
 		case "Checkbox":
 			chk := ui.NewCheckbox(attrs.Text())
 			chk.SetChecked(attrs.Checked())
-			eventname := attrs.OnToggled()
-			if eventname != "" {
-				m, ok := reflect.TypeOf(event).MethodByName(eventname)
-				if ok {
-					chk.OnToggled(func(sender *ui.Checkbox) {
-						m.Func.Call([]reflect.Value{reflect.ValueOf(event), reflect.ValueOf(sender)})
-					})
-				}
+
+			m, ok := getMethod(attrs.OnToggled())
+			if ok {
+				chk.OnToggled(func(sender *ui.Checkbox) {
+					m.Func.Call([]reflect.Value{reflect.ValueOf(event), reflect.ValueOf(sender)})
+				})
 			}
+
 			pcontrol = chk
 			x.appendControl(parent, pcontrol, attrs)
 			x.addNameControl(attrs.Name(), chk)
@@ -205,15 +209,13 @@ func (x *TXWindow) buildControls(node xmldom.Node, parent ui.Control, event inte
 		case "Combobox":
 			combox := ui.NewCombobox()
 
-			eventname := attrs.OnSelected()
-			if eventname != "" {
-				m, ok := reflect.TypeOf(event).MethodByName(eventname)
-				if ok {
-					combox.OnSelected(func(sender *ui.Combobox) {
-						m.Func.Call([]reflect.Value{reflect.ValueOf(event), reflect.ValueOf(sender)})
-					})
-				}
+			m, ok := getMethod(attrs.OnSelected())
+			if ok {
+				combox.OnSelected(func(sender *ui.Combobox) {
+					m.Func.Call([]reflect.Value{reflect.ValueOf(event), reflect.ValueOf(sender)})
+				})
 			}
+
 			pcontrol = combox
 			x.appendControl(parent, combox, attrs)
 			x.addNameControl(attrs.Name(), combox)
@@ -223,7 +225,7 @@ func (x *TXWindow) buildControls(node xmldom.Node, parent ui.Control, event inte
 			continue
 
 		case "CombItem":
-			//x.appendControl(parent, nil, attrs)
+
 			if parent != nil {
 				parent.(*ui.Combobox).Append(attrs.Text())
 			}
@@ -263,14 +265,12 @@ func (x *TXWindow) buildControls(node xmldom.Node, parent ui.Control, event inte
 		case "Slider":
 			slider := ui.NewSlider(attrs.Min(), attrs.Max())
 			slider.SetValue(attrs.IntValue())
-			eventname := attrs.OnChanged()
-			if eventname != "" {
-				m, ok := reflect.TypeOf(event).MethodByName(eventname)
-				if ok {
-					slider.OnChanged(func(sender *ui.Slider) {
-						m.Func.Call([]reflect.Value{reflect.ValueOf(event), reflect.ValueOf(sender)})
-					})
-				}
+
+			m, ok := getMethod(attrs.OnChanged())
+			if ok {
+				slider.OnChanged(func(sender *ui.Slider) {
+					m.Func.Call([]reflect.Value{reflect.ValueOf(event), reflect.ValueOf(sender)})
+				})
 			}
 			pcontrol = slider
 			x.appendControl(parent, slider, attrs)
@@ -279,15 +279,14 @@ func (x *TXWindow) buildControls(node xmldom.Node, parent ui.Control, event inte
 		case "Spinbox":
 			spinbox := ui.NewSpinbox(attrs.Min(), attrs.Max())
 			spinbox.SetValue(attrs.IntValue())
-			eventname := attrs.OnChanged()
-			if eventname != "" {
-				m, ok := reflect.TypeOf(event).MethodByName(eventname)
-				if ok {
-					spinbox.OnChanged(func(sender *ui.Spinbox) {
-						m.Func.Call([]reflect.Value{reflect.ValueOf(event), reflect.ValueOf(sender)})
-					})
-				}
+
+			m, ok := getMethod(attrs.OnChanged())
+			if ok {
+				spinbox.OnChanged(func(sender *ui.Spinbox) {
+					m.Func.Call([]reflect.Value{reflect.ValueOf(event), reflect.ValueOf(sender)})
+				})
 			}
+
 			pcontrol = spinbox
 			x.appendControl(parent, spinbox, attrs)
 			x.addNameControl(attrs.Name(), spinbox)
