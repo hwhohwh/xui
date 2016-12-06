@@ -1,0 +1,32 @@
+<?xml encoding="utf-8" version="1.0" ?>
+<Window width="600" height="500" left="100" top="200" center="true" hasmenu="true" title="这是一个测试" margined="true">
+	<HorizontalBox>
+		<Tab>
+		     <VerticalBox text="TAB1">
+			     <Label text="我是标签" />
+				 <Entry name="edit1" text="默认文本" onchanged="TestChanged"/>
+		         <Button name="test" text="按钮3" onclick="Test1" />
+				 <Combobox name="comb1" onselected="TestSelected" selected="0">
+				     <CombItem text="Item1"/>
+					 <CombItem text="Item2"/>
+					 <CombItem text="Item3"/>
+				 </Combobox>
+				<Checkbox name="chk2" text="选项2" check="true" ontoggled="Testchk" />
+				 <DatePicker />
+				 <DateTimePicker />
+				 <TimePicker />
+				 <ProgressBar name="progressbar1" />
+				 <RadioButtons />
+				 <HorizontalSeparator />
+				 <Slider value="30" name="slider1" onchanged="TestSlider" />
+				 <Spinbox value="50" name="spinbox1"  onchanged="TestSpinbox" />
+		     </VerticalBox>
+		     <VerticalBox text="TAB2">
+		         <Group text="选项组">
+		             <Button name="test" text="按钮4" onclick="Test2"/>
+			         <Checkbox name="chk1" text="选项1" check="true" ontoggled="Testchk" />
+			     </Group>
+		     </VerticalBox>
+		</Tab>
+	</HorizontalBox>
+</Window>
