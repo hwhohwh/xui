@@ -118,8 +118,8 @@ func (x *TXmlAttrs) Visible() bool {
 	return x.ToBoolDef("visible", true)
 }
 
-func (x *TXmlAttrs) Check() bool {
-	return x.ToBool("check")
+func (x *TXmlAttrs) Checked() bool {
+	return x.ToBool("checked")
 }
 
 func (x *TXmlAttrs) OnToggled() string {

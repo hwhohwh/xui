@@ -11,7 +11,7 @@
 					 <CombItem text="Item2"/>
 					 <CombItem text="Item3"/>
 				 </Combobox>
-				<Checkbox name="chk2" text="选项2" check="true" ontoggled="Testchk" />
+				<Checkbox name="chk2" text="选项2" checked="true" ontoggled="Testchk" />
 				 <DatePicker />
 				 <DateTimePicker />
 				 <TimePicker />
@@ -24,7 +24,7 @@
 		     <VerticalBox text="TAB2">
 		         <Group text="选项组">
 		             <Button name="test" text="按钮4" onclick="Test2"/>
-			         <Checkbox name="chk1" text="选项1" check="true" ontoggled="Testchk" />
+			         <Checkbox name="chk1" text="选项1" checked="true" ontoggled="Testchk" />
 			     </Group>
 		     </VerticalBox>
 		</Tab>

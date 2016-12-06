@@ -113,6 +113,7 @@ func (x *TXWindow) buildControls(node xmldom.Node, parent ui.Control, event inte
 		if subnode.NodeType() != 1 {
 			continue
 		}
+		pcontrol = nil
 		attrs = newXmlAttrsMap(subnode)
 		switch subnode.NodeName() {
 		case "Button":
@@ -171,7 +172,7 @@ func (x *TXWindow) buildControls(node xmldom.Node, parent ui.Control, event inte
 
 		case "Checkbox":
 			chk := ui.NewCheckbox(attrs.Text())
-			chk.SetChecked(attrs.Check())
+			chk.SetChecked(attrs.Checked())
 			eventname := attrs.OnToggled()
 			if eventname != "" {
 				m, ok := reflect.TypeOf(event).MethodByName(eventname)

@@ -25,7 +25,7 @@ func (x *TXControlEvent) Test2(sender *ui.Button) {
 }
 
 func (x *TXControlEvent) Testchk(sender *ui.Checkbox) {
-	fmt.Println("check=", sender.Checked())
+	fmt.Println("checked=", sender.Checked())
 }
 
 func (x *TXControlEvent) TestChanged(sender *ui.Entry) {
