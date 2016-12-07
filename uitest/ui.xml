@@ -29,6 +29,7 @@
 				    <RadioItem text="选项1" />
 					<RadioItem text="选项2" />
 				 </RadioButtons>
+				 <MultilineEntry text="这是一个测试"></MultilineEntry>
 		     </VerticalBox>
 		</Tab>
 	</HorizontalBox>

@@ -156,6 +156,21 @@ func (x *TXWindow) buildControls(node xmldom.Node, parent ui.Control, event inte
 			x.appendControl(parent, pcontrol, attrs)
 			x.addNameControl(attrs.Name(), entry)
 
+		case "MultilineEntry":
+			mentry := ui.NewMultilineEntry(attrs.NonWrapping())
+			mentry.SetReadOnly(attrs.ReadOnly())
+
+			m, ok := getMethod(attrs.OnChanged())
+			if ok {
+				mentry.OnChanged(func(sender *ui.MultilineEntry) {
+					m.Func.Call([]reflect.Value{reflect.ValueOf(event), reflect.ValueOf(sender)})
+				})
+			}
+			pcontrol = mentry
+			mentry.SetText(attrs.Text())
+			x.appendControl(parent, pcontrol, attrs)
+			x.addNameControl(attrs.Name(), mentry)
+
 		case "HorizontalBox":
 			box := ui.NewHorizontalBox()
 			box.SetPadded(attrs.Padded())
@@ -327,158 +342,6 @@ func (x *TXWindow) buildControls(node xmldom.Node, parent ui.Control, event inte
 		}
 	}
 	return root
-}
-
-func (x *TXWindow) addNameControl(name string, control interface{}) {
-	if name == "" || control == "" {
-		return
-	}
-	if _, ok := x.nameControls[name]; !ok {
-		x.nameControls[name] = control
-	}
-}
-
-func (x *TXWindow) NameControl(name string) interface{} {
-	if v, ok := x.nameControls[name]; ok {
-		return v
-	}
-	return nil
-}
-
-func (x *TXWindow) NameButton(name string) *ui.Button {
-	c := x.NameControl(name)
-	if c == nil {
-		return nil
-	}
-	return c.(*ui.Button)
-}
-
-func (x *TXWindow) NameCheckbox(name string) *ui.Checkbox {
-	c := x.NameControl(name)
-	if c == nil {
-		return nil
-	}
-	return c.(*ui.Checkbox)
-}
-
-func (x *TXWindow) NameEntry(name string) *ui.Entry {
-	c := x.NameControl(name)
-	if c == nil {
-		return nil
-	}
-	return c.(*ui.Entry)
-}
-
-func (x *TXWindow) NameHorizontalBox(name string) *ui.Box {
-	c := x.NameControl(name)
-	if c == nil {
-		return nil
-	}
-	return c.(*ui.Box)
-}
-
-func (x *TXWindow) NameVerticalBox(name string) *ui.Box {
-	c := x.NameControl(name)
-	if c == nil {
-		return nil
-	}
-	return c.(*ui.Box)
-}
-
-func (x *TXWindow) NameLabel(name string) *ui.Label {
-	c := x.NameControl(name)
-	if c == nil {
-		return nil
-	}
-	return c.(*ui.Label)
-}
-
-func (x *TXWindow) NameTab(name string) *ui.Tab {
-	c := x.NameControl(name)
-	if c == nil {
-		return nil
-	}
-	return c.(*ui.Tab)
-}
-
-func (x *TXWindow) NameGroup(name string) *ui.Group {
-	c := x.NameControl(name)
-	if c == nil {
-		return nil
-	}
-	return c.(*ui.Group)
-}
-
-func (x *TXWindow) NameCombobox(name string) *ui.Combobox {
-	c := x.NameControl(name)
-	if c == nil {
-		return nil
-	}
-	return c.(*ui.Combobox)
-}
-
-func (x *TXWindow) NameDatePicker(name string) *ui.DateTimePicker {
-	c := x.NameControl(name)
-	if c == nil {
-		return nil
-	}
-	return c.(*ui.DateTimePicker)
-}
-
-func (x *TXWindow) NameDateTimePicker(name string) *ui.DateTimePicker {
-	c := x.NameControl(name)
-	if c == nil {
-		return nil
-	}
-	return c.(*ui.DateTimePicker)
-}
-
-func (x *TXWindow) NameTimePicker(name string) *ui.DateTimePicker {
-	c := x.NameControl(name)
-	if c == nil {
-		return nil
-	}
-	return c.(*ui.DateTimePicker)
-}
-
-func (x *TXWindow) NameProgressBar(name string) *ui.ProgressBar {
-	c := x.NameControl(name)
-	if c == nil {
-		return nil
-	}
-	return c.(*ui.ProgressBar)
-}
-
-func (x *TXWindow) NameRadioButtons(name string) *ui.RadioButtons {
-	c := x.NameControl(name)
-	if c == nil {
-		return nil
-	}
-	return c.(*ui.RadioButtons)
-}
-
-//func (x *TXWindow) NameHorizontalSeparator(name string) *ui.h {
-//	c := x.NameControl(name)
-//	if c == nil {
-//		return nil
-//	}
-//	return c.(*ui.HorizontalSeparator)
-//}
-
-func (x *TXWindow) NameSlider(name string) *ui.Slider {
-	c := x.NameControl(name)
-	if c == nil {
-		return nil
-	}
-	return c.(*ui.Slider)
-}
-
-func (x *TXWindow) NameSpinbox(name string) *ui.Spinbox {
-	c := x.NameControl(name)
-	if c == nil {
-		return nil
-	}
-	return c.(*ui.Spinbox)
 }
 
 func (x *TXWindow) Show() {

@@ -161,3 +161,7 @@ func (x *TXmlAttrs) Min() int {
 func (x *TXmlAttrs) Max() int {
 	return x.ToIntDef("max", 100)
 }
+
+func (x *TXmlAttrs) NonWrapping() bool {
+	return x.ToBool("nonwrapping")
+}
