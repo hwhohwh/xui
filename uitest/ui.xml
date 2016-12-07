@@ -16,7 +16,6 @@
 				 <DateTimePicker />
 				 <TimePicker />
 				 <ProgressBar name="progressbar1" />
-				 <RadioButtons />
 				 <HorizontalSeparator />
 				 <Slider value="30" name="slider1" onchanged="TestSlider" />
 				 <Spinbox value="50" name="spinbox1"  onchanged="TestSpinbox" />
@@ -26,6 +25,10 @@
 		             <Button name="test" text="按钮4" onclick="Test2"/>
 			         <Checkbox name="chk1" text="选项1" checked="true" ontoggled="Testchk" />
 			     </Group>
+				 <RadioButtons name="radio1" selected="0" onselected="TestRadioSel">
+				    <RadioItem text="选项1" />
+					<RadioItem text="选项2" />
+				 </RadioButtons>
 		     </VerticalBox>
 		</Tab>
 	</HorizontalBox>

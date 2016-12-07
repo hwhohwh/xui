@@ -4,9 +4,8 @@ package main
 import (
 	"fmt"
 
+	"github.com/ying32/ui"
 	"github.com/ying32/xui"
-
-	"github.com/andlabs/ui"
 )
 
 type TXControlEvent struct {
@@ -46,6 +45,10 @@ func (x *TXControlEvent) TestSlider(sender *ui.Slider) {
 
 func (x *TXControlEvent) TestSpinbox(sender *ui.Spinbox) {
 	fmt.Println("spibox.value=", sender.Value())
+}
+
+func (x *TXControlEvent) TestRadioSel(sender *ui.RadioButtons) {
+	fmt.Println("radiobuttons selected=", sender.Selected())
 }
 
 func loadmyui() {

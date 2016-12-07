@@ -6,7 +6,7 @@ import (
 	"reflect"
 
 	xmldom "bitbucket.org/rj/xmldom-go"
-	"github.com/andlabs/ui"
+	"github.com/ying32/ui"
 )
 
 type TXWindow struct {
@@ -53,9 +53,12 @@ func (x *TXWindow) buildWindow(node xmldom.Node) *ui.Window {
 	if attrs == nil {
 		return nil
 	}
-	w := ui.NewWindow(attrs.Title(), attrs.Width(), attrs.Height(), attrs.HasMenu(), attrs.Center())
+	w := ui.NewWindow(attrs.Title(), attrs.Left(), attrs.Top(), attrs.Width(), attrs.Height(), attrs.HasMenu())
 	if w != nil {
 		w.SetMargined(attrs.Margined())
+		if attrs.Center() {
+			w.Center()
+		}
 	}
 	return w
 }
@@ -253,12 +256,34 @@ func (x *TXWindow) buildControls(node xmldom.Node, parent ui.Control, event inte
 			x.addNameControl(attrs.Name(), probar)
 
 		case "RadioButtons":
-			pcontrol := ui.NewRadioButtons()
+			radio := ui.NewRadioButtons()
+
+			if m, ok := getMethod(attrs.OnSelected()); ok {
+				radio.OnSelected(func(sender *ui.RadioButtons) {
+					m.Func.Call([]reflect.Value{reflect.ValueOf(event), reflect.ValueOf(sender)})
+				})
+			}
+			pcontrol = radio
 			x.appendControl(parent, pcontrol, attrs)
 			x.addNameControl(attrs.Name(), pcontrol)
 
+			//setCommAttr()
+			x.buildControls(subnode, radio, event)
+			radio.SetSelected(attrs.Selected())
+			continue
+
+		case "RadioItem":
+			if parent != nil {
+				parent.(*ui.RadioButtons).Append(attrs.Text())
+			}
+
 		case "HorizontalSeparator":
 			pcontrol = ui.NewHorizontalSeparator()
+			x.appendControl(parent, pcontrol, attrs)
+			x.addNameControl(attrs.Name(), pcontrol)
+
+		case "VerticalSeparator":
+			pcontrol = ui.NewVerticalSeparator()
 			x.appendControl(parent, pcontrol, attrs)
 			x.addNameControl(attrs.Name(), pcontrol)
 

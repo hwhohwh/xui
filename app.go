@@ -1,6 +1,6 @@
 package xui
 
-import "github.com/andlabs/ui"
+import "github.com/ying32/ui"
 
 type TApplication struct {
 }
