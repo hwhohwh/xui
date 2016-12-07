@@ -51,8 +51,22 @@ func (x *TXControlEvent) TestRadioSel(sender *ui.RadioButtons) {
 	fmt.Println("radiobuttons selected=", sender.Selected())
 }
 
+func (x *TXControlEvent) TestMenu1Click(sender *ui.MenuItem) {
+	fmt.Println("menuitem单击")
+}
+
+func (x *TXControlEvent) TestMemuOpen(sender *ui.MenuItem) {
+	ui.OpenFile(x.xw.Window)
+}
+
+func (x *TXControlEvent) TestMenuSave(sender *ui.MenuItem) {
+	ui.SaveFile(x.xw.Window)
+}
+
 func loadmyui() {
 	application := xui.NewApplication()
+	application.Init()
+
 	event := &TXControlEvent{}
 	if event == nil {
 		panic("窗口事件创建失败!")

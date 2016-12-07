@@ -2,6 +2,7 @@ package xui
 
 import (
 	"bytes"
+	"fmt"
 	"io/ioutil"
 	"reflect"
 
@@ -11,6 +12,7 @@ import (
 
 type TXWindow struct {
 	Window       *ui.Window
+	event        interface{}
 	nameControls map[string]interface{}
 }
 
@@ -27,13 +29,15 @@ func NewFormBytes(xmlstr []byte, event interface{}) (*TXWindow, error) {
 	if err != nil {
 		return nil, err
 	}
+
 	w := new(TXWindow)
+	w.event = event
 	w.nameControls = make(map[string]interface{}, 0)
 	root := doc.DocumentElement()
 	if root != nil && root.NodeName() == "Window" {
 		w.Window = w.buildWindow(root)
 		if w.Window != nil {
-			ctlroot := w.buildControls(root, nil, event)
+			ctlroot := w.buildControls(root, nil)
 			if ctlroot != nil {
 				w.Window.SetChild(ctlroot)
 			} else {
@@ -53,6 +57,19 @@ func (x *TXWindow) buildWindow(node xmldom.Node) *ui.Window {
 	if attrs == nil {
 		return nil
 	}
+	if attrs.HasMenu() {
+		var i uint
+		for i = 0; i < node.ChildNodes().Length(); i++ {
+			menuNode := node.ChildNodes().Item(i)
+			if menuNode.NodeName() == "Menus" {
+				if menuNode.ChildNodes().Length() > 0 {
+					x.buildMenus(menuNode, nil, nil)
+				}
+				node.RemoveChild(menuNode)
+				break
+			}
+		}
+	}
 	w := ui.NewWindow(attrs.Title(), attrs.Left(), attrs.Top(), attrs.Width(), attrs.Height(), attrs.HasMenu())
 	if w != nil {
 		w.SetMargined(attrs.Margined())
@@ -61,6 +78,81 @@ func (x *TXWindow) buildWindow(node xmldom.Node) *ui.Window {
 		}
 	}
 	return w
+}
+
+func (x *TXWindow) buildMenus(node xmldom.Node, w *ui.Window, menu *ui.Menu) {
+	var i uint
+	for i = 0; i < node.ChildNodes().Length(); i++ {
+		menuNode := node.ChildNodes().Item(i)
+
+		if menuNode.NodeType() != 1 {
+			continue
+		}
+		fmt.Println(menuNode.NodeName())
+		attrs := newXmlAttrsMap(menuNode)
+		switch menuNode.NodeName() {
+		case "MenuAbout":
+			if menu != nil {
+				subm := menu.AppendAbout()
+				x.addNameControl(attrs.Name(), subm)
+			}
+
+		case "Menu":
+			menu = ui.NewMenu(attrs.Text())
+
+		case "MenuItem":
+			if menu != nil {
+				if attrs.Text() == "-" {
+					menu.AppendSeparator()
+				} else {
+					subm := menu.Append(attrs.Text())
+					//subm.SetChecked(attrs.Checked())
+					if attrs.Enabled() {
+						subm.Enable()
+					} else {
+						subm.Disable()
+					}
+					m, ok := x.getMethod(attrs.Onclick())
+					if ok {
+						subm.OnClicked(func(sender *ui.MenuItem) {
+							m.Func.Call([]reflect.Value{reflect.ValueOf(x.event), reflect.ValueOf(sender)})
+						})
+					}
+					x.addNameControl(attrs.Name(), subm)
+				}
+			}
+
+		case "MenuQuit":
+			if menu != nil {
+				menu.AppendQuit()
+			}
+
+		case "MenuPreferences":
+			if menu != nil {
+				subm := menu.AppendPreferences()
+				x.addNameControl(attrs.Name(), subm)
+			}
+
+		case "MenuCheck":
+
+			if menu != nil {
+				subm := menu.AppendCheck(attrs.Text())
+				subm.SetChecked(attrs.Checked())
+				if attrs.Enabled() {
+					subm.Enable()
+				} else {
+					subm.Disable()
+				}
+				x.addNameControl(attrs.Name(), subm)
+			}
+
+		default:
+			continue
+		}
+		if menuNode.HasChildNodes() {
+			x.buildMenus(menuNode, w, menu)
+		}
+	}
 }
 
 func (x *TXWindow) appendControl(parent interface{}, child ui.Control, attrs *TXmlAttrs) {
@@ -86,7 +178,15 @@ func (x *TXWindow) appendControl(parent interface{}, child ui.Control, attrs *TX
 	}
 }
 
-func (x *TXWindow) buildControls(node xmldom.Node, parent ui.Control, event interface{}) ui.Control {
+func (x *TXWindow) getMethod(name string) (reflect.Method, bool) {
+	if name == "" {
+		var m reflect.Method
+		return m, false
+	}
+	return reflect.TypeOf(x.event).MethodByName(name)
+}
+
+func (x *TXWindow) buildControls(node xmldom.Node, parent ui.Control) ui.Control {
 	if !node.HasChildNodes() {
 		return nil
 	}
@@ -111,14 +211,6 @@ func (x *TXWindow) buildControls(node xmldom.Node, parent ui.Control, event inte
 		}
 	}
 
-	getMethod := func(name string) (reflect.Method, bool) {
-		if name == "" {
-			var m reflect.Method
-			return m, false
-		}
-		return reflect.TypeOf(event).MethodByName(name)
-	}
-
 	for i = 0; i < node.ChildNodes().Length(); i++ {
 		subnode := node.ChildNodes().Item(i)
 		if subnode.NodeType() != 1 {
@@ -131,10 +223,10 @@ func (x *TXWindow) buildControls(node xmldom.Node, parent ui.Control, event inte
 			btn := ui.NewButton(attrs.Text())
 			pcontrol = btn
 
-			m, ok := getMethod(attrs.Onclick())
+			m, ok := x.getMethod(attrs.Onclick())
 			if ok {
 				btn.OnClicked(func(sender *ui.Button) {
-					m.Func.Call([]reflect.Value{reflect.ValueOf(event), reflect.ValueOf(sender)})
+					m.Func.Call([]reflect.Value{reflect.ValueOf(x.event), reflect.ValueOf(sender)})
 				})
 			}
 
@@ -145,10 +237,10 @@ func (x *TXWindow) buildControls(node xmldom.Node, parent ui.Control, event inte
 			entry := ui.NewEntry()
 			entry.SetReadOnly(attrs.ReadOnly())
 
-			m, ok := getMethod(attrs.OnChanged())
+			m, ok := x.getMethod(attrs.OnChanged())
 			if ok {
 				entry.OnChanged(func(sender *ui.Entry) {
-					m.Func.Call([]reflect.Value{reflect.ValueOf(event), reflect.ValueOf(sender)})
+					m.Func.Call([]reflect.Value{reflect.ValueOf(x.event), reflect.ValueOf(sender)})
 				})
 			}
 			pcontrol = entry
@@ -160,10 +252,10 @@ func (x *TXWindow) buildControls(node xmldom.Node, parent ui.Control, event inte
 			mentry := ui.NewMultilineEntry(attrs.NonWrapping())
 			mentry.SetReadOnly(attrs.ReadOnly())
 
-			m, ok := getMethod(attrs.OnChanged())
+			m, ok := x.getMethod(attrs.OnChanged())
 			if ok {
 				mentry.OnChanged(func(sender *ui.MultilineEntry) {
-					m.Func.Call([]reflect.Value{reflect.ValueOf(event), reflect.ValueOf(sender)})
+					m.Func.Call([]reflect.Value{reflect.ValueOf(x.event), reflect.ValueOf(sender)})
 				})
 			}
 			pcontrol = mentry
@@ -197,10 +289,10 @@ func (x *TXWindow) buildControls(node xmldom.Node, parent ui.Control, event inte
 			chk := ui.NewCheckbox(attrs.Text())
 			chk.SetChecked(attrs.Checked())
 
-			m, ok := getMethod(attrs.OnToggled())
+			m, ok := x.getMethod(attrs.OnToggled())
 			if ok {
 				chk.OnToggled(func(sender *ui.Checkbox) {
-					m.Func.Call([]reflect.Value{reflect.ValueOf(event), reflect.ValueOf(sender)})
+					m.Func.Call([]reflect.Value{reflect.ValueOf(x.event), reflect.ValueOf(sender)})
 				})
 			}
 
@@ -227,10 +319,10 @@ func (x *TXWindow) buildControls(node xmldom.Node, parent ui.Control, event inte
 		case "Combobox":
 			combox := ui.NewCombobox()
 
-			m, ok := getMethod(attrs.OnSelected())
+			m, ok := x.getMethod(attrs.OnSelected())
 			if ok {
 				combox.OnSelected(func(sender *ui.Combobox) {
-					m.Func.Call([]reflect.Value{reflect.ValueOf(event), reflect.ValueOf(sender)})
+					m.Func.Call([]reflect.Value{reflect.ValueOf(x.event), reflect.ValueOf(sender)})
 				})
 			}
 
@@ -238,7 +330,7 @@ func (x *TXWindow) buildControls(node xmldom.Node, parent ui.Control, event inte
 			x.appendControl(parent, combox, attrs)
 			x.addNameControl(attrs.Name(), combox)
 			setCommAttr()
-			x.buildControls(subnode, combox, event)
+			x.buildControls(subnode, combox)
 			combox.SetSelected(attrs.Selected())
 			continue
 
@@ -247,6 +339,7 @@ func (x *TXWindow) buildControls(node xmldom.Node, parent ui.Control, event inte
 			if parent != nil {
 				parent.(*ui.Combobox).Append(attrs.Text())
 			}
+			continue
 
 		case "DatePicker":
 			pcontrol := ui.NewDatePicker()
@@ -273,9 +366,9 @@ func (x *TXWindow) buildControls(node xmldom.Node, parent ui.Control, event inte
 		case "RadioButtons":
 			radio := ui.NewRadioButtons()
 
-			if m, ok := getMethod(attrs.OnSelected()); ok {
+			if m, ok := x.getMethod(attrs.OnSelected()); ok {
 				radio.OnSelected(func(sender *ui.RadioButtons) {
-					m.Func.Call([]reflect.Value{reflect.ValueOf(event), reflect.ValueOf(sender)})
+					m.Func.Call([]reflect.Value{reflect.ValueOf(x.event), reflect.ValueOf(sender)})
 				})
 			}
 			pcontrol = radio
@@ -283,7 +376,7 @@ func (x *TXWindow) buildControls(node xmldom.Node, parent ui.Control, event inte
 			x.addNameControl(attrs.Name(), pcontrol)
 
 			//setCommAttr()
-			x.buildControls(subnode, radio, event)
+			x.buildControls(subnode, radio)
 			radio.SetSelected(attrs.Selected())
 			continue
 
@@ -291,6 +384,7 @@ func (x *TXWindow) buildControls(node xmldom.Node, parent ui.Control, event inte
 			if parent != nil {
 				parent.(*ui.RadioButtons).Append(attrs.Text())
 			}
+			continue
 
 		case "HorizontalSeparator":
 			pcontrol = ui.NewHorizontalSeparator()
@@ -306,10 +400,10 @@ func (x *TXWindow) buildControls(node xmldom.Node, parent ui.Control, event inte
 			slider := ui.NewSlider(attrs.Min(), attrs.Max())
 			slider.SetValue(attrs.IntValue())
 
-			m, ok := getMethod(attrs.OnChanged())
+			m, ok := x.getMethod(attrs.OnChanged())
 			if ok {
 				slider.OnChanged(func(sender *ui.Slider) {
-					m.Func.Call([]reflect.Value{reflect.ValueOf(event), reflect.ValueOf(sender)})
+					m.Func.Call([]reflect.Value{reflect.ValueOf(x.event), reflect.ValueOf(sender)})
 				})
 			}
 			pcontrol = slider
@@ -320,10 +414,10 @@ func (x *TXWindow) buildControls(node xmldom.Node, parent ui.Control, event inte
 			spinbox := ui.NewSpinbox(attrs.Min(), attrs.Max())
 			spinbox.SetValue(attrs.IntValue())
 
-			m, ok := getMethod(attrs.OnChanged())
+			m, ok := x.getMethod(attrs.OnChanged())
 			if ok {
 				spinbox.OnChanged(func(sender *ui.Spinbox) {
-					m.Func.Call([]reflect.Value{reflect.ValueOf(event), reflect.ValueOf(sender)})
+					m.Func.Call([]reflect.Value{reflect.ValueOf(x.event), reflect.ValueOf(sender)})
 				})
 			}
 
@@ -332,13 +426,14 @@ func (x *TXWindow) buildControls(node xmldom.Node, parent ui.Control, event inte
 			x.addNameControl(attrs.Name(), spinbox)
 
 		default:
+			continue
 		}
 		setCommAttr()
 		if root == nil {
 			root = lParent
 		}
 		if lParent != nil {
-			x.buildControls(subnode, lParent, event)
+			x.buildControls(subnode, lParent)
 		}
 	}
 	return root

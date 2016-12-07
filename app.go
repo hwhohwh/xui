@@ -18,6 +18,13 @@ func (self *TApplication) Run() {
 	})
 }
 
+func (self *TApplication) Init() {
+	err := ui.InitApp()
+	if err != nil {
+		panic(err)
+	}
+}
+
 func (self *TApplication) Quit() {
 	ui.Quit()
 }
