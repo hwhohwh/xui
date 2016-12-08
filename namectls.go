@@ -171,3 +171,19 @@ func (x *TXWindow) NameMultilineEntry(name string) *ui.MultilineEntry {
 	}
 	return c.(*ui.MultilineEntry)
 }
+
+func (x *TXWindow) NameMenu(name string) *ui.Menu {
+	c := x.NameControl(name)
+	if c == nil {
+		return nil
+	}
+	return c.(*ui.Menu)
+}
+
+func (x *TXWindow) NameMenuItem(name string) *ui.MenuItem {
+	c := x.NameControl(name)
+	if c == nil {
+		return nil
+	}
+	return c.(*ui.MenuItem)
+}

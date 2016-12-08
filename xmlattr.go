@@ -165,3 +165,11 @@ func (x *TXmlAttrs) Max() int {
 func (x *TXmlAttrs) NonWrapping() bool {
 	return x.ToBool("nonwrapping")
 }
+
+func (x *TXmlAttrs) Fullscreen() bool {
+	return x.ToBool("fullscreen")
+}
+
+func (x *TXmlAttrs) Borderless() bool {
+	return x.ToBool("borderless")
+}

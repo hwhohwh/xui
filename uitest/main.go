@@ -56,7 +56,12 @@ func (x *TXControlEvent) TestMenu1Click(sender *ui.MenuItem) {
 }
 
 func (x *TXControlEvent) TestMemuOpen(sender *ui.MenuItem) {
-	ui.OpenFile(x.xw.Window)
+	s := ui.OpenFile(x.xw.Window)
+	if s != "" {
+		if edit1 := x.xw.NameEntry("edit1"); edit1 != nil {
+			edit1.SetText(s)
+		}
+	}
 }
 
 func (x *TXControlEvent) TestMenuSave(sender *ui.MenuItem) {
@@ -81,6 +86,9 @@ func loadmyui() {
 	w.Window.OnClosing(func(window *ui.Window) bool {
 		application.Quit()
 		return true
+	})
+	w.Window.OnContentSizeChanged(func(window *ui.Window) {
+		fmt.Println("OnContentSizeChanged")
 	})
 	w.Show()
 	application.Run()

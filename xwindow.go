@@ -73,10 +73,13 @@ func (x *TXWindow) buildWindow(node xmldom.Node) *ui.Window {
 	w := ui.NewWindow(attrs.Title(), attrs.Left(), attrs.Top(), attrs.Width(), attrs.Height(), attrs.HasMenu())
 	if w != nil {
 		w.SetMargined(attrs.Margined())
+		w.SetBorderless(attrs.Borderless())
+		//		w.SetFullscreen(attrs.Fullscreen())
 		if attrs.Center() {
 			w.Center()
 		}
 	}
+
 	return w
 }
 

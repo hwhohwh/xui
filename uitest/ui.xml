@@ -1,5 +1,5 @@
 <?xml encoding="utf-8" version="1.0" ?>
-<Window width="600" height="500" left="100" top="200" center="true" hasmenu="true" title="这是一个测试" margined="true">
+<Window width="600" height="700" center="true" hasmenu="true" title="这是一个测试" margined="true">
 	<Menus>
 	     <Menu text="文件">
 		     <MenuAbout />
