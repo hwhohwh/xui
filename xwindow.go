@@ -81,7 +81,7 @@ func (x *TXWindow) buildWindow(node xmldom.Node) *ui.Window {
 	if w != nil {
 		w.SetMargined(attrs.Margined())
 		w.SetBorderless(attrs.Borderless())
-		//		w.SetFullscreen(attrs.Fullscreen())
+		w.SetFullscreen(attrs.Fullscreen())
 		if attrs.Center() {
 			w.Center()
 		}
@@ -344,10 +344,34 @@ func (x *TXWindow) buildControls(node xmldom.Node, parent ui.Control) ui.Control
 			combox.SetSelected(attrs.Selected())
 			continue
 
+		case "EditableCombobox":
+
+			combox := ui.NewEditableCombobox()
+			combox.SetText(attrs.Text())
+			m, ok := x.getMethod(attrs.OnChanged())
+			if ok {
+				combox.OnChanged(func(sender *ui.EditableCombobox) {
+					m.Func.Call([]reflect.Value{reflect.ValueOf(x.event), reflect.ValueOf(sender)})
+				})
+			}
+			pcontrol = combox
+			x.appendControl(parent, combox, attrs)
+			x.addNameControl(attrs.Name(), combox)
+			setCommAttr()
+			x.buildControls(subnode, combox)
+			continue
+
 		case "CombItem":
 
 			if parent != nil {
-				parent.(*ui.Combobox).Append(attrs.Text())
+				switch getClassName(parent) {
+				case "Combobox":
+					parent.(*ui.Combobox).Append(attrs.Text())
+
+				case "EditableCombobox":
+					parent.(*ui.EditableCombobox).Append(attrs.Text())
+				}
+
 			}
 			continue
 

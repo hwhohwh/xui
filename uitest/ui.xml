@@ -1,5 +1,5 @@
 <?xml encoding="utf-8" version="1.0" ?>
-<Window width="600" height="700" center="true" hasmenu="true" title="这是一个测试" margined="true">
+<Window width="600" height="500" center="true" hasmenu="false" title="这是一个测试" margined="true">
 	<Menus>
 	     <Menu text="文件">
 		     <MenuAbout />
@@ -14,7 +14,7 @@
 	</Menus>
 	<HorizontalBox>
 		<Tab>
-		     <VerticalBox text="TAB1">
+		     <VerticalBox text="第一页">
 			     <Label text="我是标签" />
 				 <Entry name="edit1" text="默认文本" onchanged="TestChanged"/>
 		         <Button name="test" text="按钮3" onclick="Test1" />
@@ -27,12 +27,14 @@
 				 <DatePicker />
 				 <DateTimePicker />
 				 <TimePicker />
+				 <Label text="进度条" />
 				 <ProgressBar name="progressbar1" />
 				 <HorizontalSeparator />
+				 <!--<Spinbox value="50" name="spinbox1"  onchanged="TestSpinbox" />-->
+				 <Label text="滑块条" />
 				 <Slider value="30" name="slider1" onchanged="TestSlider" />
-				 <Spinbox value="50" name="spinbox1"  onchanged="TestSpinbox" />
-		     </VerticalBox>
-		     <VerticalBox text="TAB2">
+		     </VerticalBox>-->
+		     <VerticalBox text="第二页">
 		         <Group text="选项组">
 		             <Button name="test" text="按钮4" onclick="Test2"/>
 			         <Checkbox name="chk1" text="选项1" checked="true" ontoggled="Testchk" />
@@ -43,6 +45,13 @@
 				 </RadioButtons>
 				 <MultilineEntry text="这是一个测试"></MultilineEntry>
 		     </VerticalBox>
+			 <VerticalBox text="第三页">
+				 <EditableCombobox text="测试了" onchanged="editcombchanged">
+				     <CombItem text="第一个项目" />
+					 <CombItem text="第二个项目" />
+					 <CombItem text="第三个项目" />
+				 </EditableCombobox>
+			 </VerticalBox>
 		</Tab>
 	</HorizontalBox>
 </Window>
