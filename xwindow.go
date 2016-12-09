@@ -10,6 +10,13 @@ import (
 	"github.com/ying32/ui"
 )
 
+const (
+	methodTypeClicked = iota + 0
+	methodTypeChanged
+	methodTypeSelected
+	methodTypeToggled
+)
+
 type TXWindow struct {
 	Window       *ui.Window
 	event        interface{}

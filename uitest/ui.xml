@@ -23,7 +23,7 @@
 					 <CombItem text="Item2"/>
 					 <CombItem text="Item3"/>
 				 </Combobox>
-				<Checkbox name="chk2" text="选项2" checked="true" ontoggled="Testchk" />
+				 <Checkbox name="chk2" text="选项2" checked="true" ontoggled="Testchk" />
 				 <DatePicker />
 				 <DateTimePicker />
 				 <TimePicker />
