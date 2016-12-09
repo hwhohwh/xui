@@ -1,5 +1,5 @@
 <?xml encoding="utf-8" version="1.0" ?>
-<Window width="600" height="500" center="true" hasmenu="false" title="这是一个测试" margined="true">
+<Window width="600" height="500" center="true" hasmenu="true" title="这是一个测试" margined="true">
 	<Menus>
 	     <Menu text="文件">
 		     <MenuAbout />
@@ -10,6 +10,13 @@
 			 <MenuItem text="打开(O)..." onclick="TestMemuOpen" />
 			 <MenuItem text="保存(S)..." onclick="TestMenuSave"  checked="true"/>
 			 <MenuCheck text="测试一个选项" checked="true"  enabled="false"/>
+		 </Menu>
+		 <Menu text="编辑">
+		     <MenuItem text="撤销" />
+			 <MenuItem text="-" />
+			 <MenuItem text="重做" />
+			 <MenuItem text="复制" />
+			 <MenuItem text="剪切" /> 
 		 </Menu>
 	</Menus>
 	<HorizontalBox>
@@ -36,8 +43,10 @@
 		     </VerticalBox>-->
 		     <VerticalBox text="第二页">
 		         <Group text="选项组">
-		             <Button name="test" text="按钮4" onclick="Test2"/>
-			         <Checkbox name="chk1" text="选项1" checked="true" ontoggled="Testchk" />
+				     <HorizontalBox>
+		                 <Button name="test" text="按钮4" onclick="Test2"/>
+			             <Checkbox name="chk1" text="选项1" checked="true" ontoggled="Testchk" />
+					 </HorizontalBox>
 			     </Group>
 				 <RadioButtons name="radio1" selected="0" onselected="TestRadioSel">
 				    <RadioItem text="选项1" />
@@ -51,6 +60,14 @@
 					 <CombItem text="第二个项目" />
 					 <CombItem text="第三个项目" />
 				 </EditableCombobox>
+			 </VerticalBox>
+			 <VerticalBox text="第四页">
+			    <Group text="Group">
+				    <VerticalBox>
+					   <Button text="button" />
+					   <Button text="button2" />
+				    </VerticalBox>
+				</Group>
 			 </VerticalBox>
 		</Tab>
 	</HorizontalBox>

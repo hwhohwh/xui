@@ -3,6 +3,8 @@ package main
 
 import (
 	"fmt"
+	"os"
+	"path/filepath"
 
 	"github.com/ying32/ui"
 	"github.com/ying32/xui"
@@ -77,7 +79,11 @@ func loadmyui() {
 		panic("窗口事件创建失败!")
 		return
 	}
-	w, err := xui.NewFromFile("ui.xml", event)
+
+	path, _ := filepath.Abs(filepath.Dir(os.Args[0]))
+
+	w, err := xui.NewFromFile(path+"/ui.xml", event)
+	//w, err := xui.NewFormBytes([]byte(uixmlstr), event)
 	if err != nil {
 		fmt.Println("错误：", err)
 		return

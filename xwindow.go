@@ -2,7 +2,7 @@ package xui
 
 import (
 	"bytes"
-	"fmt"
+	//	"fmt"
 	"io/ioutil"
 	"reflect"
 
@@ -98,7 +98,6 @@ func (x *TXWindow) buildMenus(node xmldom.Node, w *ui.Window, menu *ui.Menu) {
 		if menuNode.NodeType() != 1 {
 			continue
 		}
-		fmt.Println(menuNode.NodeName())
 		attrs := newXmlAttrsMap(menuNode)
 		switch menuNode.NodeName() {
 		case "MenuAbout":
@@ -169,6 +168,7 @@ func (x *TXWindow) appendControl(parent interface{}, child ui.Control, attrs *TX
 	if parent == nil {
 		return
 	}
+
 	switch getClassName(parent) {
 	case "Box":
 		box := parent.(*ui.Box)
@@ -323,7 +323,7 @@ func (x *TXWindow) buildControls(node xmldom.Node, parent ui.Control) ui.Control
 			pcontrol = group
 			group.SetMargined(attrs.Margined())
 			x.appendControl(parent, group, attrs)
-			lParent = parent
+			lParent = pcontrol
 			x.addNameControl(attrs.Name(), group)
 
 		case "Combobox":
