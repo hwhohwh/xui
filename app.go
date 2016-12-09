@@ -5,6 +5,8 @@ import "github.com/ying32/ui"
 type TApplication struct {
 }
 
+var Application *TApplication
+
 func NewApplication() *TApplication {
 	return &TApplication{}
 }
@@ -27,4 +29,8 @@ func (self *TApplication) Init() {
 
 func (self *TApplication) Quit() {
 	ui.Quit()
+}
+
+func init() {
+	Application = new(TApplication)
 }

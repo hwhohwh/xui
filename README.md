@@ -134,8 +134,8 @@ func (x *TXControlEvent) TestMenuSave(sender *ui.MenuItem) {
 }
 
 func loadmyui() {
-	application := xui.NewApplication()
-	application.Init()
+
+	xui.Application.Init()
 
 	event := &TXControlEvent{}
 	if event == nil {
@@ -149,14 +149,14 @@ func loadmyui() {
 	}
 	event.xw = w
 	w.Window.OnClosing(func(window *ui.Window) bool {
-		application.Quit()
+		ui.Quit()
 		return true
 	})
 	w.Window.OnContentSizeChanged(func(window *ui.Window) {
 		fmt.Println("OnContentSizeChanged")
 	})
 	w.Show()
-	application.Run()
+	xui.Application.Run()
 
 }
 
@@ -165,6 +165,7 @@ func main() {
 	loadmyui()
 
 }
+
 
 
 ```
