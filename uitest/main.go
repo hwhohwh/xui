@@ -72,8 +72,6 @@ func (x *TXControlEvent) TestMenuSave(sender *ui.MenuItem) {
 
 func loadmyui() {
 
-	xui.Application.Init()
-
 	event := &TXControlEvent{}
 	if event == nil {
 		panic("窗口事件创建失败!")
@@ -97,12 +95,10 @@ func loadmyui() {
 		fmt.Println("OnContentSizeChanged")
 	})
 	w.Show()
-	xui.Application.Run()
-
 }
 
 func main() {
-	fmt.Println("Hello World!")
+	xui.Application.Init()
 	loadmyui()
-
+	xui.Application.Run()
 }
