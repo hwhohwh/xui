@@ -361,7 +361,7 @@ func (x *TXWindow) buildControls(node xmldom.Node, parent ui.Control) ui.Control
 			x.buildControls(subnode, combox)
 			continue
 
-		case "CombItem":
+		case "TextItem":
 
 			if parent != nil {
 				switch getClassName(parent) {
@@ -370,6 +370,9 @@ func (x *TXWindow) buildControls(node xmldom.Node, parent ui.Control) ui.Control
 
 				case "EditableCombobox":
 					parent.(*ui.EditableCombobox).Append(attrs.Text())
+
+				case "RadioButtons":
+					parent.(*ui.RadioButtons).Append(attrs.Text())
 				}
 
 			}
@@ -412,12 +415,6 @@ func (x *TXWindow) buildControls(node xmldom.Node, parent ui.Control) ui.Control
 			//setCommAttr()
 			x.buildControls(subnode, radio)
 			radio.SetSelected(attrs.Selected())
-			continue
-
-		case "RadioItem":
-			if parent != nil {
-				parent.(*ui.RadioButtons).Append(attrs.Text())
-			}
 			continue
 
 		case "HorizontalSeparator":
