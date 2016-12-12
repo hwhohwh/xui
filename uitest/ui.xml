@@ -26,9 +26,9 @@
 				 <Entry name="edit1" text="默认文本" onchanged="TestChanged"/>
 		         <Button name="test" text="按钮3" onclick="Test1" />
 				 <Combobox name="comb1" onselected="TestSelected" selected="0">
-				     <CombItem text="Item1"/>
-					 <CombItem text="Item2"/>
-					 <CombItem text="Item3"/>
+				     <TextItem text="Item1"/>
+					 <TextItem text="Item2"/>
+					 <TextItem text="Item3"/>
 				 </Combobox>
 				 <Checkbox name="chk2" text="选项2" checked="true" ontoggled="Testchk" />
 				 <DatePicker />
@@ -49,16 +49,16 @@
 					 </HorizontalBox>
 			     </Group>
 				 <RadioButtons name="radio1" selected="0" onselected="TestRadioSel">
-				    <RadioItem text="选项1" />
-					<RadioItem text="选项2" />
+				    <TextItem text="选项1" />
+					<TextItem text="选项2" />
 				 </RadioButtons>
 				 <MultilineEntry text="这是一个测试"></MultilineEntry>
 		     </VerticalBox>
 			 <VerticalBox text="第三页">
 				 <EditableCombobox text="测试了" onchanged="editcombchanged">
-				     <CombItem text="第一个项目" />
-					 <CombItem text="第二个项目" />
-					 <CombItem text="第三个项目" />
+				     <TextItem text="第一个项目" />
+					 <TextItem text="第二个项目" />
+					 <TextItem text="第三个项目" />
 				 </EditableCombobox>
 			 </VerticalBox>
 			 <VerticalBox text="第四页">
