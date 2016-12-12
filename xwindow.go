@@ -103,6 +103,13 @@ func (x *TXWindow) buildMenus(node xmldom.Node, w *ui.Window, menu *ui.Menu) {
 		case "MenuAbout":
 			if menu != nil {
 				subm := menu.AppendAbout()
+				m, ok := x.getMethod(attrs.Onclick())
+				if ok {
+					subm.OnClicked(func(sender *ui.MenuItem) {
+						m.Func.Call([]reflect.Value{reflect.ValueOf(x.event), reflect.ValueOf(sender)})
+					})
+				}
+
 				x.addNameControl(attrs.Name(), subm)
 			}
 
@@ -139,6 +146,12 @@ func (x *TXWindow) buildMenus(node xmldom.Node, w *ui.Window, menu *ui.Menu) {
 		case "MenuPreferences":
 			if menu != nil {
 				subm := menu.AppendPreferences()
+				m, ok := x.getMethod(attrs.Onclick())
+				if ok {
+					subm.OnClicked(func(sender *ui.MenuItem) {
+						m.Func.Call([]reflect.Value{reflect.ValueOf(x.event), reflect.ValueOf(sender)})
+					})
+				}
 				x.addNameControl(attrs.Name(), subm)
 			}
 
@@ -151,6 +164,12 @@ func (x *TXWindow) buildMenus(node xmldom.Node, w *ui.Window, menu *ui.Menu) {
 					subm.Enable()
 				} else {
 					subm.Disable()
+				}
+				m, ok := x.getMethod(attrs.Onclick())
+				if ok {
+					subm.OnClicked(func(sender *ui.MenuItem) {
+						m.Func.Call([]reflect.Value{reflect.ValueOf(x.event), reflect.ValueOf(sender)})
+					})
 				}
 				x.addNameControl(attrs.Name(), subm)
 			}
