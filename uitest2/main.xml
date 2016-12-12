@@ -1,0 +1,18 @@
+<?xml encoding="utf-8" version="1.0" ?>
+<Window width="500" height="400" hasmenu="true" margined="true" center="true" title="主窗口">
+    <Menus>
+	     <Menu text="文件">
+		     <MenuAbout onclick="MenuClickAbout" />
+			 <MenuQuit />
+			 <MenuPreferences />
+		     <MenuItem text="新建(F)" onclick="TestMenu1Click" />
+			 <MenuItem text="-" />
+			 <MenuItem text="打开(O)..." onclick="TestMemuOpen" />
+			 <MenuItem text="保存(S)..." onclick="TestMenuSave"  checked="true"/>
+			 <MenuCheck text="测试一个选项" checked="true"  enabled="false"/>
+		 </Menu>
+	</Menus>
+	 <HorizontalBox>
+	     <Button text="button" />
+	 </HorizontalBox>
+</Window>
