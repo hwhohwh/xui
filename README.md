@@ -166,14 +166,16 @@ func (x *TXControlEvent) TestMenuSave(sender *ui.MenuItem) {
 
 func loadmyui() {
 
-	xui.Application.Init()
-
 	event := &TXControlEvent{}
 	if event == nil {
 		panic("窗口事件创建失败!")
 		return
 	}
-	w, err := xui.NewFromFile("ui.xml", event)
+
+	path, _ := filepath.Abs(filepath.Dir(os.Args[0]))
+
+	w, err := xui.NewFromFile(path+"/ui.xml", event)
+	//w, err := xui.NewFormBytes([]byte(uixmlstr), event)
 	if err != nil {
 		fmt.Println("错误：", err)
 		return
@@ -187,14 +189,12 @@ func loadmyui() {
 		fmt.Println("OnContentSizeChanged")
 	})
 	w.Show()
-	xui.Application.Run()
-
 }
 
 func main() {
-	fmt.Println("Hello World!")
+	xui.Application.Init()
 	loadmyui()
-
+	xui.Application.Run()
 }
 
 
