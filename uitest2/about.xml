@@ -1,6 +1,6 @@
 <?xml encoding="utf-8" version="1.0" ?>
-<Window width="301" height="322" hasmenu="true" margined="true" center="true" title="主窗口">
-     <VerticalBox>
+<Window width="301" height="322" hasmenu="true" margined="true" center="true" title="关于">
+     <HorizontalBox>
 	     <Label text="关于uitest2" />
-	 </VerticalBox>
+	 </HorizontalBox>
 </Window>

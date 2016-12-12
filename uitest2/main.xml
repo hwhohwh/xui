@@ -13,6 +13,11 @@
 		 </Menu>
 	</Menus>
 	 <HorizontalBox>
-	     <Button text="button" />
+	     <VerticalBox>
+	         <Button text="button" />
+		 </VerticalBox>
+		 <VerticalBox>
+		    <MultilineEntry text="" />
+		 </VerticalBox>
 	 </HorizontalBox>
 </Window>
