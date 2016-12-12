@@ -2,6 +2,11 @@
 xui是一个基于[andlabs的ui库](https://github.com/andlabs/ui)的，使用xml布局来替代手动创建，目前仅打算支持Mac OS X,
 目前ui库已经转为由[本人自己维护的版本了](https://github.com/ying32/ui)。   
 
+## 第三方库
+
+> bitbucket.org/rj/xmldom-go  
+> github.com/andlabs/ui  
+
 ## 使用例程
 
 
@@ -9,7 +14,7 @@ xui是一个基于[andlabs的ui库](https://github.com/andlabs/ui)的，使用xm
 ```xml  
 
 <?xml encoding="utf-8" version="1.0" ?>
-<Window width="600" height="700" center="true" hasmenu="true" title="这是一个测试" margined="true">
+<Window width="600" height="500" center="true" hasmenu="true" title="这是一个测试" margined="true">
 	<Menus>
 	     <Menu text="文件">
 		     <MenuAbout />
@@ -21,38 +26,64 @@ xui是一个基于[andlabs的ui库](https://github.com/andlabs/ui)的，使用xm
 			 <MenuItem text="保存(S)..." onclick="TestMenuSave"  checked="true"/>
 			 <MenuCheck text="测试一个选项" checked="true"  enabled="false"/>
 		 </Menu>
+		 <Menu text="编辑">
+		     <MenuItem text="撤销" />
+			 <MenuItem text="-" />
+			 <MenuItem text="重做" />
+			 <MenuItem text="复制" />
+			 <MenuItem text="剪切" /> 
+		 </Menu>
 	</Menus>
 	<HorizontalBox>
 		<Tab>
-		     <VerticalBox text="TAB1">
+		     <VerticalBox text="第一页">
 			     <Label text="我是标签" />
 				 <Entry name="edit1" text="默认文本" onchanged="TestChanged"/>
 		         <Button name="test" text="按钮3" onclick="Test1" />
 				 <Combobox name="comb1" onselected="TestSelected" selected="0">
-				     <CombItem text="Item1"/>
-					 <CombItem text="Item2"/>
-					 <CombItem text="Item3"/>
+				     <TextItem text="Item1"/>
+					 <TextItem text="Item2"/>
+					 <TextItem text="Item3"/>
 				 </Combobox>
 				 <Checkbox name="chk2" text="选项2" checked="true" ontoggled="Testchk" />
 				 <DatePicker />
 				 <DateTimePicker />
 				 <TimePicker />
+				 <Label text="进度条" />
 				 <ProgressBar name="progressbar1" />
 				 <HorizontalSeparator />
+				 <!--<Spinbox value="50" name="spinbox1"  onchanged="TestSpinbox" />-->
+				 <Label text="滑块条" />
 				 <Slider value="30" name="slider1" onchanged="TestSlider" />
-				 <Spinbox value="50" name="spinbox1"  onchanged="TestSpinbox" />
-		     </VerticalBox>
-		     <VerticalBox text="TAB2">
+		     </VerticalBox>-->
+		     <VerticalBox text="第二页">
 		         <Group text="选项组">
-		             <Button name="test" text="按钮4" onclick="Test2"/>
-			         <Checkbox name="chk1" text="选项1" checked="true" ontoggled="Testchk" />
+				     <HorizontalBox>
+		                 <Button name="test" text="按钮4" onclick="Test2"/>
+			             <Checkbox name="chk1" text="选项1" checked="true" ontoggled="Testchk" />
+					 </HorizontalBox>
 			     </Group>
 				 <RadioButtons name="radio1" selected="0" onselected="TestRadioSel">
-				    <RadioItem text="选项1" />
-					<RadioItem text="选项2" />
+				    <TextItem text="选项1" />
+					<TextItem text="选项2" />
 				 </RadioButtons>
 				 <MultilineEntry text="这是一个测试"></MultilineEntry>
 		     </VerticalBox>
+			 <VerticalBox text="第三页">
+				 <EditableCombobox text="测试了" onchanged="editcombchanged">
+				     <TextItem text="第一个项目" />
+					 <TextItem text="第二个项目" />
+					 <TextItem text="第三个项目" />
+				 </EditableCombobox>
+			 </VerticalBox>
+			 <VerticalBox text="第四页">
+			    <Group text="Group">
+				    <VerticalBox>
+					   <Button text="button" />
+					   <Button text="button2" />
+				    </VerticalBox>
+				</Group>
+			 </VerticalBox>
 		</Tab>
 	</HorizontalBox>
 </Window>
