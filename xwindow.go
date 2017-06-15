@@ -194,16 +194,13 @@ func (x *TXWindow) appendControl(parent interface{}, child ui.Control, attrs *TX
 		box.Append(child, attrs.Stretchy())
 
 	case "Tab":
-		tab := parent.(*ui.Tab)
-		tab.Append(attrs.Text(), child)
+		parent.(*ui.Tab).Append(attrs.Text(), child)
 
 	case "Group":
-		group := parent.(*ui.Group)
-		group.SetChild(child)
+		parent.(*ui.Group).SetChild(child)
 
 	case "Combobox":
-		combox := parent.(*ui.Combobox)
-		combox.Append(attrs.Text())
+		parent.(*ui.Combobox).Append(attrs.Text())
 	}
 }
 
